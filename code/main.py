@@ -2,7 +2,7 @@ import pygame
 import random 
 from os.path import join 
 
-from random import randint
+from random import randint 
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, groups): 
@@ -53,7 +53,18 @@ class Laser(pygame.sprite.Sprite):
         self.rect = self.image.get_frect(midbottom = pos)
         
     def update(self, dt):    
-         self.rect.centery -= 400 * dt        
+         self.rect.centery -= 400 * dt   
+         if self.rect.bottom < 0: 
+             self.kill()   
+             
+class Meteor(pygame.sprite.Sprite):
+    def __init__(self, surf, pos, groups):
+          super().__init__ (groups)
+          self.image = surf
+          self.rect = self.image.get_frect(center = pos)
+          
+    def update(self, dt):      
+            self.rect.centery += 400 * dt 
 
 # general setup
 pygame.init()
@@ -63,23 +74,16 @@ pygame.display.set_caption('Space Shooter')
 running = True
 clock = pygame.time.Clock() 
 
-# plain surface 
-surf = pygame.Surface((100, 200))
-surf.fill('orange') 
-x = 100
-
-
-all_sprites = pygame.sprite.Group() 
+# import
 star_surf = pygame.image.load(join('../images/star.png')).convert_alpha() 
+meteor_surf = pygame.image.load(join('../images/meteor.png')).convert_alpha() 
+laser_surf = pygame.image.load(join('../images/laser.png')).convert_alpha() 
+
+# sprites
+all_sprites = pygame.sprite.Group() 
 for i in range(20):
     Star(all_sprites, star_surf)   
 player = Player(all_sprites)     
-
-
-meteor_surf = pygame.image.load(join('../images/meteor.png')).convert_alpha() 
-meteor_rect = meteor_surf.get_frect(center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)) 
-
-laser_surf = pygame.image.load(join('../images/laser.png')).convert_alpha() 
 
 
 #custom events -> meteor event
@@ -94,16 +98,14 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == meteor_event:
-            print('create_meteor') 
+            x, y = randint(0, WINDOW_WIDTH), randint(0, WINDOW_HEIGHT) 
+            Meteor(meteor_surf, (x,y), all_sprites)  
         
     all_sprites.update(dt)    
                
     # Draw the game 
     display_surface.fill('darkgrey')   
     all_sprites.draw(display_surface) 
-    
-    
-    
     pygame.display.update()      
 
 pygame.quit()
