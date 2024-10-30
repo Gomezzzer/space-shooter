@@ -87,15 +87,15 @@ laser_surf = pygame.image.load(join('../images/laser.png')).convert_alpha()
 
 # sprites
 all_sprites = pygame.sprite.Group() 
+meteor_sprites = pygame.sprite.Group() 
 for i in range(20):
     Star(all_sprites, star_surf)   
 player = Player(all_sprites)     
 
 
-#custom events -> meteor event
+# custom events -> meteor event
 meteor_event = pygame.event.custom_type() 
 pygame.time.set_timer(meteor_event, 500)  
-
 
 while running:
     dt = clock.tick() / 1000
@@ -105,13 +105,14 @@ while running:
             running = False
         if event.type == meteor_event:
             x, y = randint(0, WINDOW_WIDTH), randint(-200, -100)  
-            Meteor(meteor_surf, (x,y), all_sprites)  
-        
+            Meteor(meteor_surf, (x,y), (all_sprites, meteor_sprites))   
+    # update     
     all_sprites.update(dt)    
                
-    # Draw the game 
+    # draw the game 
     display_surface.fill('darkgrey')   
     all_sprites.draw(display_surface) 
+    
     pygame.display.update()      
 
 pygame.quit()
