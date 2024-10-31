@@ -95,7 +95,7 @@ player = Player(all_sprites)
 
 # custom events -> meteor event
 meteor_event = pygame.event.custom_type() 
-pygame.time.set_timer(meteor_event, 500)  
+pygame.time.set_timer(meteor_event, 50)  
 
 while running:
     dt = clock.tick() / 1000
@@ -107,8 +107,11 @@ while running:
             x, y = randint(0, WINDOW_WIDTH), randint(-200, -100)  
             Meteor(meteor_surf, (x,y), (all_sprites, meteor_sprites))   
     # update     
-    all_sprites.update(dt)    
-               
+    all_sprites.update(dt)   
+    collision_sprites =  pygame.sprite.spritecollide(player, meteor_sprites, True) 
+    if collision_sprites:
+        print(collision_sprites[0])   
+                   
     # draw the game 
     display_surface.fill('darkgrey')   
     all_sprites.draw(display_surface) 
