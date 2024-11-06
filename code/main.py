@@ -77,7 +77,7 @@ def collisions():
     
     collision_sprites =  pygame.sprite.spritecollide(player, meteor_sprites, True) 
     if collision_sprites:
-         running = False 
+         running = True 
         
     for laser in laser_sprites:
       collided_sprites =  pygame.sprite.spritecollide(laser, meteor_sprites, True) 
@@ -96,6 +96,8 @@ clock = pygame.time.Clock()
 star_surf = pygame.image.load(join('../images/star.png')).convert_alpha() 
 meteor_surf = pygame.image.load(join('../images/meteor.png')).convert_alpha() 
 laser_surf = pygame.image.load(join('../images/laser.png')).convert_alpha() 
+font = pygame.font.Font(join('images', 'Oxanium-Bold.ttf'), 20)  
+text_surf = font.render('text', True, 'red') 
 
 # sprites
 all_sprites = pygame.sprite.Group() 
@@ -128,6 +130,7 @@ while running:
     display_surface.fill('darkgrey')   
     all_sprites.draw(display_surface) 
     
+    display_surface.blit(text_surf, (0,0)) 
     pygame.display.update()      
 
 pygame.quit()
