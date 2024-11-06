@@ -96,7 +96,7 @@ player = Player(all_sprites)
 
 # custom events -> meteor event
 meteor_event = pygame.event.custom_type() 
-pygame.time.set_timer(meteor_event, 50)  
+pygame.time.set_timer(meteor_event, 500)  
 
 while running:
     dt = clock.tick() / 1000
@@ -114,7 +114,9 @@ while running:
         print(collision_sprites[0])   
         
     for laser in laser_sprites:
-        pygame.sprite.spritecollide(laser, meteor_sprites, True)     
+      collided_sprites =  pygame.sprite.spritecollide(laser, meteor_sprites, True) 
+      if collided_sprites:
+          laser.kill()    
                    
     # draw the game 
     display_surface.fill('darkgrey')   
